@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var readerSchema = new mongoose.Schema({
+    deviceName: String,
     deviceToken: { type: String, unique: true },
     handler: String,
     whiteList: [

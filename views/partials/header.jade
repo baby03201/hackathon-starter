@@ -11,12 +11,12 @@
         | SmartDoor Gadget
     .collapse.navbar-collapse
       ul.nav.navbar-nav
-        li(class=(title == 'Home') ? 'active' : undefined)
-          a(href='/') Home
-        li(class=(title == 'API Examples') ? 'active' : undefined)
-          a(href='/api') API Examples
-        li(class=(title == 'Contact') ? 'active' : undefined)
-          a(href='/contact') Contact
+        li(class=(title == 'Reader') ? 'active' : undefined)
+          a(href='/reader') Reader
+        li(class=(title == 'Handler') ? 'active' : undefined)
+          a(href='/handler') Handler
+        li(class=(title == 'Log') ? 'active' : undefined)
+          a(href='/log') Log
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)

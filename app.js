@@ -36,6 +36,7 @@ var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var readerController = require('./controllers/reader');
 var handlerController = require('./controllers/handler');
+var logController = require('./controllers/log');
 
 /**
  * API keys and Passport configuration.
@@ -86,11 +87,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(function(req, res, next) {
-  if (req.path === '/api/upload') {
+//  if (req.path === '/api/upload') {
     next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
+//  } else {
+//    lusca.csrf()(req, res, next);
+//  }
 });
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
@@ -132,9 +133,15 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
  * Custom SmartDoor Gadget routes
  */
 app.get('/reader', readerController.getReader);
+app.get('/reader/:id', readerController.getSingleReader);
 app.post('/reader/:id/whitelist/:whiteid', readerController.insertWhiteList);
 
+app.post('/request', readerController.requestPermission);
+
+app.get('/handler', handlerController.getHandler);
 app.get('/handler/:id', handlerController.getHandlerState);
+
+app.get('/log', logController.getLog);
 
 /**
  * API examples routes.

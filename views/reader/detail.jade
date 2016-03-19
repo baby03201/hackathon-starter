@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+    h1=reader.deviceName
+
+    table.table.table-striped
+        thead
+            tr
+                th Device Id
+                th Action
+        tbody
+            - if (whiteLists.length) {
+            each whiteList in whiteLists
+                tr
+                    td=whiteList.deviceId
+                    td #[a(href='#') delete]
+            - }

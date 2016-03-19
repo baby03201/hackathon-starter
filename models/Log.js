@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 
 var logSchema = new mongoose.Schema({
-    reader: ObjectId,
-    handler: ObjectId,
+    reader: String,
+    handler: String,
     requestTime: { type: Date, default: Date.now },
-    success: Boolean,
-    photoFile: String
+    photoFilePath: String,
+    success: Boolean
 });
 
 var Log = mongoose.model('Log', logSchema);

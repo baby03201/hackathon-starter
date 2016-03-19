@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+    h1=title
+
+    table.table.table-striped
+        tr
+            th Device Name
+            th Device Token
+            th Status
+        - if (handlers.length) {
+        each handler in handlers
+            tr
+                td=handler.deviceName
+                td=handler.deviceToken
+                td#state=handler.state
+        - }

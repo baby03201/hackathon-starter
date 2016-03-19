@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+    h1=title
+
+    table.table.table-striped
+        thead
+            tr
+                th Reader
+                th Handler
+                th Time
+                th Photo Path
+                th Success
+        tbody
+            - if (logs.length) {
+            each log in logs
+                tr
+                    td=log.reader
+                    td=log.handler
+                    td=log.requestTime
+                    td=log.photoFilePath
+                    td=log.success
+            - }

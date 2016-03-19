@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+    h1=title
+
+    table.table.table-striped
+        thead
+            tr
+                th Device Name
+                th Action
+        tbody
+            - if (readers.length) {
+            each reader in readers
+                tr
+                    td=reader.deviceName
+                    td #[a(href='/reader/'+reader.deviceToken) view]
+            - }
