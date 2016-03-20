@@ -12,6 +12,9 @@ pids
 logs
 results
 tmp
+*.png
+*.jpg
+
 
 # API keys and secrets
 .env
