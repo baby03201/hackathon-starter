@@ -3,13 +3,14 @@ extends ../layout
 block content
     h1=title
 
-    table.table.table-striped
+    table.table.table-hover
         thead
             tr
                 th Reader
                 th Handler
+                th Device
                 th Time
-                th Photo Path
+                th#weird Photo Path
                 th Success
         tbody
             - if (logs.length) {
@@ -17,7 +18,10 @@ block content
                 tr
                     td=log.reader
                     td=log.handler
+                    td=log.deviceId
                     td=log.requestTime
-                    td=log.photoFilePath
+                    td
+                        a(class='fancybox', href='images/'+log.photoFilePath)
+                            img(id='fancyImage', src='images/'+log.photoFilePath)
                     td=log.success
             - }

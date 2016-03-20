@@ -51,43 +51,46 @@ exports.getSingleReader = function(req, res) {
 exports.requestPermission = function(req, res) {
     var deviceId = req.param('deviceId', '');//req.query['deviceId'] || '';
     var deviceToken = req.param('deviceToken', '');//req.query['deviceToken'] || '';
-    var photoName = req.param('photoName', '');//req.query['photoName'] || '';
     var recognition = req.param('recognition', 1);//req.query['recognition'] || 0;
+    var photoName = req.param('photoName', '');
     var timestamp = req.param('timestamp', '');
     var date = new Date();
-    if (timestamp != '')
-        date = Date(timestamp * 1000);
+    if (timestamp != '') {
+        date = Date(timestamp);
+    }
 
 
     Reader.findOne({'deviceToken': deviceToken}, 'deviceName deviceToken handler whiteList', function (err, reader) {
         if (err) return res.json({'success': 0, 'message': 'something went wrong when query reader'});
-
+        console.log('deviceToken '+ deviceToken);
+        console.log('deviceId '+ deviceId);
+        console.log('photoName ' + photoName);
         if (reader) {
+            var handler = reader.handler;
+            var lists = reader.whiteList;
+            var object = _.findIndex(lists, function(list) {
+                return list.deviceId == deviceId;
+            });
+
+            Log.create({
+                'reader': deviceToken,
+                'handler': handler,
+                'success': (object != -1)? true: false,
+                'deviceId': deviceId,
+                'requestTime': date,
+                'photoFilePath': photoName
+            }, function (err, log) {
+                if (err)
+                    console.log('failed to save log' + JSON.stringify(err));
+                else
+                    console.log('save successfully');
+            });
             if (recognition == 0) {
                 console.log('rfid card accessed');
                 // Check whitelist and add log in system
-                var handler = reader.handler;
-                var lists = reader.whiteList;
-                var object = _.findIndex(lists, function(list) {
-                    return list.deviceId == deviceId;
-                });
-
-                Log.create({
-                    'reader': deviceToken,
-                    'handler': handler,
-                    'success': (object != -1)? true: false,
-                    'requestTime': date,
-                    'photoFilePath': photoName
-                }, function (err, log) {
-                    if (err)
-                        console.log('failed to save log' + JSON.stringify(err));
-                    else
-                        console.log('save successfully');
-                });
 
                 if (object != -1) {
                     updateHandlerState(handler, true);
-
                     setTimeout(function() {
                         updateHandlerState(handler, false);
                     }, 10000);
