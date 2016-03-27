@@ -3,7 +3,7 @@ var async = require('async');
 var Log = require('../models/Log');
 
 exports.getLog = function(req, res) {
-    var q = Log.find().sort({'requestTime':-1}).limit(50);
+    var q = Log.find().sort({'requestTime':-1}).limit(10);
     q.exec(function(err, results) {
         if (results != undefined) {
             var lists = _.map(results, function(result) {

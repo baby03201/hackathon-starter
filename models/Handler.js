@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var handlerSchema = new mongoose.Schema({
     deviceName: String,
     deviceToken: String,
-    state: Boolean
+    state: Number
 });
 
 var Handler = mongoose.model('Handler', handlerSchema);

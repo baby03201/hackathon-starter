@@ -55,7 +55,10 @@ exports.requestPermission = function(req, res) {
     var photoName = req.param('photoName', '');
     var timestamp = req.param('timestamp', '');
     var date = new Date();
-    if (timestamp != '') {
+    // LKS
+	var socketio = req.app.get('socketio');
+	
+	if (timestamp != '') {
         date = Date(timestamp);
     }
 
@@ -75,7 +78,7 @@ exports.requestPermission = function(req, res) {
             Log.create({
                 'reader': deviceToken,
                 'handler': handler,
-                'success': (object != -1)? true: false,
+                'success': (object != -1)? 1: 0,
                 'deviceId': deviceId,
                 'requestTime': date,
                 'photoFilePath': photoName
@@ -89,12 +92,16 @@ exports.requestPermission = function(req, res) {
                 // Check whitelist and add log in system
 
             if (object != -1) {
-                updateHandlerState(handler, true);
+                updateHandlerState(handler, 1);
+				socketio.emit('state.updated', 1); // emit an event for all connected clients
                 setTimeout(function() {
-                    updateHandlerState(handler, false);
-                }, 10000);
+                    updateHandlerState(handler, 0);
+					socketio.emit('state.updated', 0);
+				}, 3000);
                 return res.json({'success': 1});
             } else {
+				updateHandlerState(handler, 2);
+				socketio.emit('state.updated', 2); // emit an event for all connected clients
                 return res.json({'success': 1});
             }
         } else {

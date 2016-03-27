@@ -6,7 +6,7 @@ var logSchema = new mongoose.Schema({
     deviceId: String,
     requestTime: { type: Date, default: Date.now },
     photoFilePath: String,
-    success: Boolean
+    success: Number
 });
 
 var Log = mongoose.model('Log', logSchema);
