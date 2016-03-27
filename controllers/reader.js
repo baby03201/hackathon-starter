@@ -51,7 +51,7 @@ exports.getSingleReader = function(req, res) {
 exports.requestPermission = function(req, res) {
     var deviceId = req.param('deviceId', '');//req.query['deviceId'] || '';
     var deviceToken = req.param('deviceToken', '');//req.query['deviceToken'] || '';
-    var recognition = req.param('recognition', 1);//req.query['recognition'] || 0;
+    var recognition = req.param('recognition', true);//req.query['recognition'] || 0;
     var photoName = req.param('photoName', '');
     var timestamp = req.param('timestamp', '');
     var date = new Date();
@@ -85,19 +85,15 @@ exports.requestPermission = function(req, res) {
                 else
                     console.log('save successfully');
             });
-            if (recognition == 0) {
                 console.log('rfid card accessed');
                 // Check whitelist and add log in system
 
-                if (object != -1) {
-                    updateHandlerState(handler, true);
-                    setTimeout(function() {
-                        updateHandlerState(handler, false);
-                    }, 10000);
-                    return res.json({'success': 1});
-                } else {
-                    return res.json({'success': 1});
-                }
+            if (object != -1) {
+                updateHandlerState(handler, true);
+                setTimeout(function() {
+                    updateHandlerState(handler, false);
+                }, 10000);
+                return res.json({'success': 1});
             } else {
                 return res.json({'success': 1});
             }

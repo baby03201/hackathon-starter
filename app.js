@@ -47,6 +47,12 @@ var passportConfig = require('./config/passport');
  * Create Express server.
  */
 var app = express();
+// LKS
+// add socket.io support
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+app.set('socketio', io);
+connections = [];
 
 /**
  * Connect to MongoDB.
@@ -60,7 +66,11 @@ mongoose.connection.on('error', function() {
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 3000);
+// LKS
+// add socket.io support
+var port = 3000;
+server.listen(process.env.PORT || port);
+//app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compress());
@@ -240,8 +250,19 @@ app.use(errorHandler());
 /**
  * Start Express server.
  */
+
 app.listen(app.get('port'), function() {
-  console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+  console.log('Express server listening on port %d in %s mode', port, app.get('env'));
 });
+
+io.sockets.on('connection', function(socket){
+    connections.push(socket);
+    console.log('[Connected] %s sockets connected.',connections.length);
+
+    socket.on('disconnect', function(data){
+        connections.splice(connections.indexOf(socket), 1);
+        console.log('[Disconnected] %s sockets connected.',connections.length);
+    })
+})
 
 module.exports = app;

@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
   // Place JavaScript code here...
+	/*
 	if($('#state').length){
 		setInterval(function(){
 			$.get( "handler/151515", function( data ) {
@@ -13,7 +14,24 @@ $(document).ready(function() {
 				  }
 			});	
 		},1000);
-	}
+	}*/
 
 	$(".fancybox").fancybox();
+
+	$(function(){
+		var socket = io.connect();	
+		socket.on('status.updated', function(data) {
+			console.log("status: "+data);
+			if(data==0){
+				$('#state').html('idle');
+			}
+			else if(data==1){
+				$('#state').html('granted');
+			}
+			else{
+				$('#state').html('deny');
+			}
+		});
+	});
+
 });

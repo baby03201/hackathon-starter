@@ -12,8 +12,8 @@ pids
 logs
 results
 tmp
-*.png
-*.jpg
+public/images/*.png
+public/images/*.jpg
 
 
 # API keys and secrets
