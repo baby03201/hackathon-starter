@@ -59,7 +59,8 @@
     "twilio": "^3.3.0-edge",
     "twit": "^2.2.3",
     "validator": "^5.1.0",
-    "yui": "^3.18.1"
+    "yui": "^3.18.1",
+	"socket.io": "*"
   },
   "devDependencies": {
     "chai": "^3.5.0",
