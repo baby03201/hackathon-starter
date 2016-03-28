@@ -13,5 +13,12 @@ block content
             tr
                 td=handler.deviceName
                 td=handler.deviceToken
-                td#state=handler.state
+                case handler.state
+                    when 0
+                        td#state Idle
+                    when 1
+                        td#state Granted
+                    when 2
+                        td#state Deny
+
         - }

@@ -23,13 +23,13 @@ $(document).ready(function() {
 		socket.on('status.updated', function(data) {
 			console.log("status: "+data);
 			if(data==0){
-				$('#state').html('idle');
+				$('#state').html('Idle');
 			}
 			else if(data==1){
-				$('#state').html('granted');
+				$('#state').html('Granted');
 			}
 			else{
-				$('#state').html('deny');
+				$('#state').html('Deny');
 			}
 		});
 	});

@@ -3,13 +3,33 @@ var async = require('async');
 var Reader = require('../models/Reader');
 var Log = require('../models/Log');
 var Handler = require('../models/Handler');
+var exec = require('child_process').exec;
+var child;
 
+function APIToAOP(method, key, value, handler){
+	//method=Put/Get
+	command = "./aBeingTool DAS "+method+" "+key+" "+value;
+	command += " | grep resp | tail -n 1 | awk -F',' '{ print $4 }' | awk -F'\"' '{ printf $2 }'";
+	child = exec(command, function (error, stdout, stderr) {
+		if (error !== null) {
+			console.log('exec error: ' + error);
+			return;
+		}
+		console.log('stdout: '+stdout+".");
+		handler(stdout);
+	});
+}
 
-function updateHandlerState(handlerToken, state) {
+function updateHandlerState(req, handlerToken, state) {
     Handler.findOne({'deviceToken': handlerToken}, function(err, handler) {
-        console.log('handler was set to '+ state);
-        handler.state = state;
-        handler.save();
+		var res, ret;
+		APIToAOP("Put", "status", state, function(ret){
+			console.log('handler was set to '+ ret);
+			handler.state = ret;
+			handler.save();
+			var socketio = req.app.get('socketio');
+			socketio.emit('status.updated', ret);	
+		});
     });
 };
 
@@ -55,8 +75,6 @@ exports.requestPermission = function(req, res) {
     var photoName = req.param('photoName', '');
     var timestamp = req.param('timestamp', '');
     var date = new Date();
-    // LKS
-	var socketio = req.app.get('socketio');
 	
 	if (timestamp != '') {
         date = Date(timestamp);
@@ -91,18 +109,26 @@ exports.requestPermission = function(req, res) {
                 console.log('rfid card accessed');
                 // Check whitelist and add log in system
 
+			if (recognition == true){
+				// pop up
+				return res.json({'success': 1});
+			}
             if (object != -1) {
-                updateHandlerState(handler, 1);
-				socketio.emit('state.updated', 1); // emit an event for all connected clients
+				//granted
+                updateHandlerState(req, handler, 1);
                 setTimeout(function() {
-                    updateHandlerState(handler, 0);
-					socketio.emit('state.updated', 0);
+					//idle
+                    updateHandlerState(req, handler, 0);
 				}, 3000);
                 return res.json({'success': 1});
             } else {
-				updateHandlerState(handler, 2);
-				socketio.emit('state.updated', 2); // emit an event for all connected clients
-                return res.json({'success': 1});
+				//deny
+				updateHandlerState(req, handler, 2);
+				setTimeout(function() {
+					//idle
+                    updateHandlerState(req, handler, 0);
+				}, 3000);
+				return res.json({'success': 1});
             }
         } else {
             return res.json({'success': 0, 'message': 'Reader not found!'});
