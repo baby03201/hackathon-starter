@@ -8826,9 +8826,15 @@ textarea {
 .fa {
   margin-right: 6px; }
 
+.table tr>td.vert-align{
+  vertical-align: middle;
+  height: 38px;
+}
+
 #fancyImage {
-  width: 40%;
-  height: 40%; }
+  max-width: 100%;
+  max-height: 100%; 
+}
 
 #weird {
   width: 10%; }
