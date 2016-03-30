@@ -1,20 +1,17 @@
-$(document).ready(function() {
+function ModalActive(title, body) {
+		$("#myModal .modal-title").html(title);
+		$("#myModal .modal-body").html(body);
+		$("#myModal").modal();
+}
 
-  // Place JavaScript code here...
-	/*
-	if($('#state').length){
-		setInterval(function(){
-			$.get( "handler/151515", function( data ) {
-				  console.log(data.success);
-				  if(data.success==false){
-					  $('#state').html('false');
-				  }
-				  else{	
-					  $('#state').html('true');
-				  }
-			});	
-		},1000);
-	}*/
+$("#Grant").on('click',function(){
+	$.get('open_door/1234567', function(data){
+		$("#myModal").modal('hide');
+		console.log(data);
+	});
+});
+
+$(document).ready(function() {	
 
 	$(".fancybox").fancybox();
 
@@ -28,10 +25,18 @@ $(document).ready(function() {
 			else if(data==1){
 				$('#state').html('Granted');
 			}
-			else{
+			else if(data==2){
 				$('#state').html('Deny');
 			}
+			else{
+				$('#state').html('Recognition');
+			}
+		});
+		socket.on('modal.active', function(data) {
+			console.log("modal.active: "+data);
+			header_string="Recognition";
+			body_string='<div class=text-center><img src="images/'+data+'"></div>';
+			ModalActive(header_string,body_string);	
 		});
 	});
-
 });

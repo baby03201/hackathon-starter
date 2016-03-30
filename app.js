@@ -146,6 +146,8 @@ app.get('/reader', readerController.getReader);
 app.get('/reader/:id', readerController.getSingleReader);
 app.post('/reader/:id/whitelist/:whiteid', readerController.insertWhiteList);
 
+app.get('/open_door/:id', readerController.getOpenDoor);
+app.post('/image_done', readerController.uploadImage);
 app.post('/request', readerController.requestPermission);
 
 app.get('/handler', handlerController.getHandler);

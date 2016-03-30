@@ -22,3 +22,14 @@ block content
                         td#state Deny
 
         - }
+
+    div(class='modal fade' id='myModal' role='dialog')
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button(type='button' class='close' data-dismiss='modal') &times;
+                    h4.modal-title Modal Header
+                div.modal-body
+                    p Some text in the modal.
+                div.modal-footer
+                    button(type='button' id='Grant' class='btn btn-primary' data-dismiss='modal') Grant

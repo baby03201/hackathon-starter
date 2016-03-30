@@ -10,8 +10,8 @@ block content
                 th.col-md-1.text-center.vert-align Handler
                 th.col-md-1.text-center.vert-align Device
                 th.col-md-4.text-center.vert-align Time
-                th.col-md-4.text-center.vert-align Photo Path
-                th.col-md-1.text-center.vert-align Success
+                th.col-md-4.text-center.vert-align Photo
+                th.col-md-1.text-center.vert-align Status
         tbody
             - if (logs.length) {
             each log in logs
@@ -23,5 +23,21 @@ block content
                     td.col-md-4.text-center.vert-align
                         a(class='fancybox', href='images/'+log.photoFilePath)
                             img(id='fancyImage', src='images/'+log.photoFilePath)
-                    td.col-md-1.text-center.vert-align=log.success
+                    if (log.success==1)
+                        td.col-md-1.text-center.vert-align Granted
+                    else if (log.success==2)
+                        td.col-md-1.text-center.vert-align Deny
+                    else
+                        td.col-md-1.text-center.vert-align Recognition
+
             - }
+    div(class='modal fade' id='myModal' role='dialog')
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button(type='button' class='close' data-dismiss='modal')
+                    h4.modal-title Modal Header
+                div.modal-body
+                    p Some text in the modal.
+                div.modal-footer
+                    button(type='button' class='btn btn-default' data-dismiss='modal')
